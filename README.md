@@ -45,7 +45,7 @@ npm install
 Start the solver by running:
 
 ```bash
-npx playwright test ./tests/linkedinLogin.spec.js
+npx playwright test ./tests/linkedinLogin.spec.js --headed
 ```
 
 ---
