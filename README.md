@@ -48,8 +48,6 @@ Start the solver by running:
 npx playwright ./tests/linkedinLogin.spec.js
 ```
 
-*(Replace `index.js` with your actual entry file if different.)*
-
 ---
 
 ## Security
