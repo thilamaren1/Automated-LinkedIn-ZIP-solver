@@ -13,7 +13,7 @@ const dy = [0, -1, 1, 0];
 let isEnd = false;
 
 doenv.config({
-    path : path.join('C:/Users/HP/Desktop/shopping','/.env')
+    path : path.join(__dirname,'../','/.env')
 });
 function DFS(mat, mpp, ans, ci, cj, lastInd, currNum, vis) {
     vis[ci][cj] = true;
