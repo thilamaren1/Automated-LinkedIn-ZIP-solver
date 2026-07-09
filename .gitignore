@@ -12,5 +12,5 @@ node_modules/
 /Dockerfile
 
 /tests/example.spec.js
-
+/tests/original.spec.js
 /.env
