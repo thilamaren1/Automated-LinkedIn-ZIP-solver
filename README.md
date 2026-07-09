@@ -78,6 +78,7 @@ If the script fails during login on subsequent runs:
 2. Go to **lines 110–112**.
 3. Modify these lines based on the login screen you see:
    - **If LinkedIn asks you to enter your email again**, **uncomment** lines **110–112**.
-   - **If LinkedIn logs you in directly without asking for your email**, **comment out** lines **110–112**.
+   - **If LinkedIn asks you to enter only password**, **uncomment** lines **110**.
+   - **If LinkedIn logs you in directly without asking for your email and password** and password***, **comment out** lines **110–112**.
 
 This is only required because LinkedIn occasionally changes its login UI depending on the account and session state.
