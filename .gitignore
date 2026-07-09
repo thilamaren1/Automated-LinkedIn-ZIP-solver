@@ -11,6 +11,6 @@ node_modules/
 /linkedin2.json
 /Dockerfile
 
-/tests/example.spec.json
+/tests/example.spec.js
 
 /.env
