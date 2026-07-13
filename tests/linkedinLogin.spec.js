@@ -111,7 +111,6 @@ test("Linkedin Login",async function({browser}){
         await authPage.getByRole('textbox', { name: 'Password' }).fill(process.env.pass);
         await authPage.getByRole('button', { name: 'Sign in', exact: true }).click();
         await authPage.waitForURL(/feed|checkpoint\/challenge/);
-        await authPage.waitForTimeout(3000);
     }
     if(authPage.url().includes("checkpoint/challenge")){
         await authPage.pause();
