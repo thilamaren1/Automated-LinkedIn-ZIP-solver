@@ -40,42 +40,12 @@ npm install
 
 ---
 
-### 4. Configure Playwright
-
-Open `playwright.config.js` and make the following changes:
-
-- **Comment out** the additional browser projects (`firefox` and `webkit`) so that only **Chromium** is enabled.
-- Ensure only the **Chromium** project remains uncommented, for example:
-
-```javascript
-projects: [
-  {
-    name: 'chromium',
-    use: { ...devices['Desktop Chrome'] },
-  },
-
-  // {
-  //   name: 'firefox',
-  //   use: { ...devices['Desktop Firefox'] },
-  // },
-
-  // {
-  //   name: 'webkit',
-  //   use: { ...devices['Desktop Safari'] },
-  // },
-],
-```
-
-This prevents Playwright from launching multiple browser workers and ensures the script runs only in **Chromium**, which is the browser supported by this project.
-
----
-
 ## Running the Script
 
 Start the solver by running:
 
 ```bash
-npx playwright test ./tests/linkedinLogin.spec.js
+npx playwright test ./tests/linkedinLogin.spec.js --headed
 ```
 
 ---

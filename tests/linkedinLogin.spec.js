@@ -1,4 +1,3 @@
-
 // {-1,0,0,1} = dx
 // {0,-1,1,0} = dy
 // {-1,-1,-1,-1} = top , left , right , bottom
@@ -13,7 +12,8 @@ const dy = [0, -1, 1, 0];
 let isEnd = false;
 
 doenv.config({
-    path : path.join(__dirname,'./.env')
+
+    path : path.join(__dirname,'../','/.env')
 });
 function DFS(mat, mpp, ans, ci, cj, lastInd, currNum, vis) {
     vis[ci][cj] = true;
