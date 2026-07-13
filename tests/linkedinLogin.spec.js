@@ -107,9 +107,9 @@ test("Linkedin Login",async function({browser}){
         });
         authPage = await authContext.newPage();
         await authPage.goto('https://www.linkedin.com/feed');
-        await authPage.getByRole('textbox', { name: 'Email or phone' }).fill(process.env.email);
-        await authPage.getByRole('textbox', { name: 'Password' }).fill(process.env.pass);
-        await authPage.getByRole('button', { name: 'Sign in', exact: true }).click();
+        // await authPage.getByRole('textbox', { name: 'Email or phone' }).fill(process.env.email);
+        // await authPage.getByRole('textbox', { name: 'Password' }).fill(process.env.pass);
+        // await authPage.getByRole('button', { name: 'Sign in', exact: true }).click();
         await authPage.waitForURL(/feed|checkpoint\/challenge/);
     }
     if(authPage.url().includes("checkpoint/challenge")){

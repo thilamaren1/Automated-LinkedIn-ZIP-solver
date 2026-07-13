@@ -17,25 +17,20 @@ cd Automated-LinkedIn-ZIP-solver
 
 ---
 
-### 2. Create a `.env` File
-
-Create a `.env` file in the project's root directory and add your LinkedIn credentials:
-
-```env
-email=your_linkedin_email
-pass=your_linkedin_password
-```
-
-> **Note:** Never commit your `.env` file to GitHub.
-
----
-
-### 3. Install Dependencies
+### 2. Install Dependencies
 
 Install all required packages:
 
 ```bash
 npm install
+```
+
+---
+
+### 3. Install the required Playwright browsers:
+
+```bash
+npx playwright install
 ```
 
 ---
