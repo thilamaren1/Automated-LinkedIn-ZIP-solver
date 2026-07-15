@@ -11,7 +11,7 @@ The entire script runs **locally** on your machine. Your LinkedIn credentials ar
 ### 1. Clone the Repository
 
 ```bash
-git clone <repository-url>
+git clone https://github.com/username/Automated-LinkedIn-ZIP-Solver.git
 cd Automated-LinkedIn-ZIP-solver
 ```
 
@@ -40,7 +40,24 @@ npm install
 
 ---
 
-## Running the Script
+### 4. Install the required Playwright browsers:
+
+```bash
+npx playwright install
+```
+
+---
+
+### 5. Rename the template file:
+   Change the file extension from `.env.example` to `.env` using your terminal:
+   ```bash
+   # On Windows 
+   rename .env.example  .env
+   ```
+
+---
+
+### 6. Running the Script
 
 Start the solver by running:
 
