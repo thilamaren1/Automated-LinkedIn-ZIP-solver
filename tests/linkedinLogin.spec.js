@@ -1,7 +1,3 @@
-// {-1,0,0,1} = dx
-// {0,-1,1,0} = dy
-// {-1,-1,-1,-1} = top , left , right , bottom
-
 const {test,expect} = require('@playwright/test');
 const doenv = require('dotenv');
 const path = require('path');
@@ -12,7 +8,6 @@ const dy = [0, -1, 1, 0];
 let isEnd = false;
 
 doenv.config({
-
     path : path.join(__dirname,'../','/.env')
 });
 function DFS(mat, mpp, ans, ci, cj, lastInd, currNum, vis) {
@@ -100,17 +95,11 @@ test("Linkedin Login",async function({browser}){
             storageState:'linkedin.json'
         });
         authPage = await authContext.newPage();
-        // now this is not going to feed its ending beofre
-        // two questions will 
-        // can i go to feed directly because it is already using the context
-        // or should i go through login steps as below and then go to feed
         await authPage.goto('https://www.linkedin.com/login/');
         await authPage.getByRole('textbox', { name: 'Email or phone' }).fill(process.env.email);
         await authPage.getByRole('textbox', { name: 'Password' }).fill(process.env.pass);
         await authPage.getByRole('button', { name: 'Sign in', exact: true }).click();
         await authPage.waitForTimeout(3000);
-        //await authPage.goto('https://www.linkedin.com/feed');
-
     }
     else{
         authContext = await browser.newContext({
@@ -118,12 +107,12 @@ test("Linkedin Login",async function({browser}){
         });
         authPage = await authContext.newPage();
         await authPage.goto('https://www.linkedin.com/feed');
+        //await authPage.getByRole('textbox', { name: 'Email or phone' }).fill(process.env.email);
         await authPage.getByRole('textbox', { name: 'Password' }).fill(process.env.pass);
         await authPage.getByRole('button', { name: 'Sign in', exact: true }).click();
         await authPage.waitForURL(/feed|checkpoint\/challenge/);
         await authPage.waitForTimeout(3000);
     }
-    //await authPage.getByRole('textbox', { name: 'Email or phone' }).fill(process.env.email);
     if(authPage.url().includes("checkpoint/challenge")){
         await authPage.pause();
         console.log("auth saved");
@@ -132,7 +121,6 @@ test("Linkedin Login",async function({browser}){
         })
         await authPage.goto('https://www.linkedin.com/feed');
     }
-    //await page.waitForTimeout(30000);
     if(authPage.url().includes("feed")){
         await expect(authPage).toHaveURL(/feed/);
         await authPage.waitForTimeout(3000);
@@ -205,7 +193,6 @@ test("Linkedin Login",async function({browser}){
 
         for(let i=0;i<Dimensions.Rows;i++){
             for(let j=0;j<Dimensions.Cols;j++){
-                //console.log(grid[i][j]+" "+(i*grid.length +j));
                 if (grid[i][j] > maxNum) {
                     maxNum = grid[i][j];
                     maxi = i;
@@ -217,17 +204,13 @@ test("Linkedin Login",async function({browser}){
         for(let i=0;i<Dimensions.Rows;i++){
             for(let j=0;j<Dimensions.Cols;j++) {
                 if (grid[i][j] === 1) {
-                    //console.log("startInd"+" "+(i*grid.length +j));
                     ans.push(i * grid.length + (j));
                     DFS(grid,mpp,ans,i,j,maxi * grid.length + (maxj),1,vis);
                 }
             }
         }
-       // await authPage.waitForTimeout(2000);
-        //data.locator(`div[data-cell-idx="${ans[0]}"]`).click();
         let prev = ans[0];
         for(let i=0;i<ans.length;i++){
-            //console.log(ans[i]);
             if(i==0){
                 await data.locator(`div[data-cell-idx="${ans[0]}"]`).click();
             }
