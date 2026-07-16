@@ -1,15 +1,25 @@
+// Automated LinkedIn ZIP Solver
+// This Playwright test authenticates with LinkedIn, reconstructs the
+// daily ZIP puzzle from the DOM, computes a valid solution using DFS,
+// and automatically plays the solution.
 const {test,expect} = require('@playwright/test');
 const doenv = require('dotenv');
 const path = require('path');
 const fs = require('fs');
 
+// Direction vectors representing Up, Left, Right and Down.
 const dx = [-1, 0, 0, 1];
 const dy = [0, -1, 1, 0];
 let isEnd = false;
 
+// Configure environment variables from the local .env file.
 doenv.config({
     path : path.join(__dirname,'../','/.env')
 });
+
+// Performs a Depth-First Search (DFS) with backtracking to find a
+// valid path through the puzzle while respecting numbered cells,
+// walls and ensuring every cell is visited exactly once.
 function DFS(mat, mpp, ans, ci, cj, lastInd, currNum, vis) {
     vis[ci][cj] = true;
     if (ans.length === mat.length * mat[0].length && ans[ans.length - 1] === lastInd) {
@@ -43,6 +53,9 @@ function DFS(mat, mpp, ans, ci, cj, lastInd, currNum, vis) {
     }
     vis[ci][cj] = false;
 }
+
+// Extract the number of rows and columns from the grid's
+// inline style attribute.
 function getRowAndCol (styleAttribute){
     let Row = 0;
     let Col = 0;
@@ -60,6 +73,8 @@ function getRowAndCol (styleAttribute){
     }
 }
 
+// Creates a new authenticated LinkedIn session and stores it
+// locally as 'linkedin.json' for reuse in future executions.
 async function createAuth(page,context){
     await page.goto('https://www.linkedin.com/login/');
     await page.getByRole('textbox', { name: 'Email or phone' }).fill(process.env.email);
@@ -69,6 +84,10 @@ async function createAuth(page,context){
     if(URL.includes("/login")){
         console.log("Wrong username or Password");
     }
+    // LinkedIn may require additional verification (2FA, CAPTCHA,
+    // email/phone verification or a security checkpoint) during the
+    // first login. Pause execution until the user completes the
+    // verification manually, then save the authenticated session.
     else if(URL.includes('/checkpoint/challenge')){
         await page.pause();
         console.log("auth saved");
@@ -82,9 +101,17 @@ async function createAuth(page,context){
     await page.close();
     return 1;
 }
+
+// Main Playwright test:
+// 1. Authenticate the user.
+// 2. Read the ZIP puzzle.
+// 3. Compute the solution.
+// 4. Replay the solution automatically.
 test("Linkedin Login",async function({browser}){
     let authContext;
     let authPage;
+    // Create a new authenticated session only if one
+    // does not already exist.
     if(!fs.existsSync('linkedin.json')){
         const context = await browser.newContext();
         const page = await context.newPage();
@@ -101,6 +128,7 @@ test("Linkedin Login",async function({browser}){
         await authPage.getByRole('button', { name: 'Sign in', exact: true }).click();
         await authPage.waitForTimeout(3000);
     }
+    // Reuse the previously saved authenticated session.
     else{
         authContext = await browser.newContext({
             storageState:'linkedin.json'
@@ -112,6 +140,10 @@ test("Linkedin Login",async function({browser}){
         //await authPage.getByRole('button', { name: 'Sign in', exact: true }).click();
         await authPage.waitForURL(/feed|checkpoint\/challenge/);
     }
+
+    // If LinkedIn requests another security verification,
+    // pause the execution and save the refreshed session
+    // after verification is completed.
     if(authPage.url().includes("checkpoint/challenge")){
         await authPage.pause();
         console.log("auth saved");
@@ -123,6 +155,7 @@ test("Linkedin Login",async function({browser}){
     if(authPage.url().includes("feed")){
         await expect(authPage).toHaveURL(/feed/);
         await authPage.waitForTimeout(3000);
+        // Navigate to the daily LinkedIn ZIP puzzle.
         await authPage.goto('https://www.linkedin.com/games/zip');
         const data = authPage.locator('div[data-testid="interactive-grid"]');
         const styleAttributeFromData = await data.getAttribute('style');
@@ -138,6 +171,8 @@ test("Linkedin Login",async function({browser}){
                     let number = await isNumbered.getAttribute('aria-label');
                     grid[i][j]=number-'0';
                 }
+                // Inspect the CSS ::after pseudo-element to determine
+                // whether walls exist on each side of the current cell.
                 const walls = await cell.locator('div').evaluateAll(divs => {
                     let arr = [0,0,0,0];
                     for (const div of divs) {
@@ -183,13 +218,15 @@ test("Linkedin Login",async function({browser}){
                 mpp.set(cellNo,blocks);
             }
         }
-        
+        // Find the highest numbered cell, which represents
+        // the final numbered destination in the puzzle.
         let maxNum = 0;
         let maxi = -1;
         let maxj = -1;
         const ans = [];
         const vis = Array.from({ length: Dimensions.Rows }, () => Array(Dimensions.Cols).fill(false));
-
+        // Start DFS from every cell containing the number 1
+        // until a valid solution is found.
         for(let i=0;i<Dimensions.Rows;i++){
             for(let j=0;j<Dimensions.Cols;j++){
                 if (grid[i][j] > maxNum) {
@@ -208,6 +245,8 @@ test("Linkedin Login",async function({browser}){
                 }
             }
         }
+        // Replay the computed path by simulating keyboard
+        // arrow key presses in the browser.
         let prev = ans[0];
         for(let i=0;i<ans.length;i++){
             if(i==0){

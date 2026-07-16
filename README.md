@@ -1,65 +1,77 @@
 # Automated LinkedIn ZIP Solver
 
-This project uses **Playwright** to automatically solve the daily **LinkedIn ZIP** puzzle.
+Automatically solves the daily **LinkedIn ZIP** puzzle using **Playwright**.
 
-The entire script runs **locally** on your machine. Your LinkedIn credentials are stored only in a local `.env` file and are **never sent anywhere**, so your login information remains on your system.
+The entire automation runs **locally** on your machine. Your LinkedIn credentials are stored only in a local `.env` file and are **never uploaded or shared**.
+
+---
+
+## Features
+
+- ✅ Automatic LinkedIn authentication
+- ✅ Session persistence using Playwright's `storageState`
+- ✅ Automatically reads the ZIP puzzle grid
+- ✅ Solves the puzzle using a Depth-First Search (DFS) algorithm
+- ✅ Plays the solution automatically using keyboard navigation
 
 ---
 
 ## Prerequisites
 
-### 1. Clone the Repository
+Before running the project, make sure you have:
 
-```bash
-git clone https://github.com/username/Automated-LinkedIn-ZIP-Solver.git
-cd Automated-LinkedIn-ZIP-solver
-```
+- Node.js (v18 or later recommended)
+- npm
+- Google Chrome / Chromium (Playwright will install the required browser)
 
 ---
 
-### 2. Create a `.env` File
+## Installation
 
-Create a `.env` file in the project's root directory and add your LinkedIn credentials:
+### 1. Clone the repository
+
+```bash
+git clone https://github.com/username/Automated-LinkedIn-ZIP-Solver.git
+cd Automated-LinkedIn-ZIP-Solver
+```
+
+### 2. Install dependencies
+
+```bash
+npm install
+```
+
+### 3. Install Playwright browsers
+
+```bash
+npx playwright install
+```
+
+### 4. Configure your LinkedIn credentials
+
+Rename the template file:
+
+```bash
+# Windows
+rename .env.example .env
+```
+
+or manually rename `.env.example` to `.env`.
+
+Then edit the `.env` file:
 
 ```env
 email=your_linkedin_email
 pass=your_linkedin_password
 ```
 
-> **Note:** Never commit your `.env` file to GitHub.
+> **Important:** Never commit your `.env` file to GitHub.
 
 ---
 
-### 3. Install Dependencies
+## Running the Solver
 
-Install all required packages:
-
-```bash
-npm install
-```
-
----
-
-### 4. Install the required Playwright browsers:
-
-```bash
-npx playwright install
-```
-
----
-
-### 5. Rename the template file:
-   Change the file extension from `.env.example` to `.env` using your terminal:
-   ```bash
-   # On Windows 
-   rename .env.example  .env
-   ```
-
----
-
-### 6. Running the Script
-
-Start the solver by running:
+Run the following command:
 
 ```bash
 npx playwright test ./tests/linkedinLogin.spec.js --headed
@@ -67,21 +79,50 @@ npx playwright test ./tests/linkedinLogin.spec.js --headed
 
 ---
 
+# First-Time Login
+
+When you run the script for the **first time**, LinkedIn may detect a new browser session and display one of the following security checks:
+
+- Two-Factor Authentication (2FA)
+- CAPTCHA
+- Email verification
+- Phone verification
+- Security checkpoint
+
+If this happens, the script automatically pauses and waits for you to complete the verification manually.
+
+Once verification is complete, the authenticated browser session is saved as `linkedin.json`.
+
+Future runs will reuse this saved session, allowing the solver to skip the login process whenever possible.
+
+If your session expires or LinkedIn requests verification again, simply complete the verification and the session will be saved again.
+
+---
+
 ## Security
 
-- Your LinkedIn credentials are stored locally in the `.env` file.
-- No credentials are uploaded or shared.
-- The automation runs entirely on your own machine.
+- Your LinkedIn credentials remain on your local machine.
+- Credentials are read only from the `.env` file.
+- No credentials are transmitted anywhere except LinkedIn during login.
+- The project does not collect, upload, or store any personal information.
 
 ---
 
 ## Notes
 
-- Make sure you have **Node.js** installed before starting.
 - Keep your `.env` file private.
-- If LinkedIn changes the ZIP puzzle interface, the solver may require updates.
+- Do not commit `linkedin.json`.
+- If LinkedIn updates the ZIP game interface, minor changes to the automation may be required.
+- If the saved session becomes invalid, delete `linkedin.json` and run the script again to create a new authenticated session.
 
 ---
+
+## Disclaimer
+
+This project is intended for educational and automation-learning purposes.
+
+LinkedIn may change its authentication flow or puzzle interface at any time, which could require updates to the automation.
+
 
 ## Important Note
 
