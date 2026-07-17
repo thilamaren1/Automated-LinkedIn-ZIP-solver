@@ -32,7 +32,7 @@ Before running the project, make sure you have:
 
 ```bash
 git clone https://github.com/username/Automated-LinkedIn-ZIP-Solver.git
-cd Automated-LinkedIn-ZIP-Solver
+cd Automated-LinkedIn-ZIP-solver
 ```
 
 ### 2. Install dependencies
@@ -123,6 +123,7 @@ This project is intended for educational and automation-learning purposes.
 
 LinkedIn may change its authentication flow or puzzle interface at any time, which could require updates to the automation.
 
+---
 
 ## Important Note
 
